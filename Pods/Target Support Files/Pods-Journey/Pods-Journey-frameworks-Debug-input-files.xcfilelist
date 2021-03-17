@@ -1,0 +1,4 @@
+${PODS_ROOT}/Target Support Files/Pods-Journey/Pods-Journey-frameworks.sh
+${BUILT_PRODUCTS_DIR}/CoreAnimation/CoreAnimation.framework
+${BUILT_PRODUCTS_DIR}/Realm/Realm.framework
+${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework
