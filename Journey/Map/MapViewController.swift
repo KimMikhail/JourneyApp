@@ -169,10 +169,6 @@ class MapViewController: UIViewController, MapDisplayLogic {
     
 
     func displayStopSavingRoute(viewModel: Map.StopSavingRoute.ViewModel) {
-        
-//        statisticViewController.clearLabels()
-        
-
         router?.routeToRouteList(segue: UIStoryboardSegue(identifier: "", source: self, destination: (tabBarController?.viewControllers![1])!))
         
     }

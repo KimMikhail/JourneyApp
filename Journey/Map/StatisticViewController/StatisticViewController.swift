@@ -145,7 +145,15 @@ class StatisticViewController: CardViewController {
                 self.startRouteButton.setTitle("Start", for: .normal)
                 self.startRouteButton.layer.borderWidth = 2
             }
+            clearLabels()
             
         }
+    }
+    private func clearLabels(){
+        timeLabel.text = "00:00:00"
+        distanceLabel.text = "0"
+        speedLabel.text = "0"
+        averageSpeedLabel.text = "0"
+        stepsLabel.text = "0"
     }
 }
