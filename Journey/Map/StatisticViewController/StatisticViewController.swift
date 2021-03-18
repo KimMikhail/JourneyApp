@@ -139,6 +139,7 @@ class StatisticViewController: CardViewController {
             guard let mapVC = controller as? MapViewController else { return }
             mapVC.saveRoute()
             mapVC.isOnTheWay = false
+            startRouteButton.gestureRecognizers?.removeAll()
             UIView.animate(withDuration: 0.3) {
                 self.startRouteButton.frame = self.startButtonFrame
                 self.startRouteButton.setTitle("Start", for: .normal)
