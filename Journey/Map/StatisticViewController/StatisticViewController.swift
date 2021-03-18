@@ -60,11 +60,18 @@ class StatisticViewController: CardViewController {
         guard let _ = mapVC.mapView.userLocation.location else { return }
         mapVC.saveLocation()
         mapVC.isOnTheWay = true
-        UIView.animate(withDuration: 0.5) {
-            button.transform = CGAffineTransform(translationX: -(self.handleArea.frame.width / 2) + button.frame.width / 2 + 6, y: 0)
-            button.layer.cornerRadius = 0
+        UIView.animate(withDuration: 0.5) { [self] in
+            let frame = CGRect(x: 6, y: 12, width: (button.superview?.frame.width)! - 12 - self.centerButton.frame.width - ((button.superview?.frame.maxX)! - self.centerButton.frame.maxX), height: 30)
+            let panGesture = UIPanGestureRecognizer(target: mapVC, action: #selector(swipeToStopGesture(recognizer: )))
+            
+//            button.transform = CGAffineTransform(translationX: -(self.handleArea.frame.width / 2) + button.frame.width / 2 + 6, y: 0)
+//            button.layer.cornerRadius = 0
+            button.frame = frame
             button.setTitle("||", for: .normal)
         }
+    }
+    @objc func swipeToStopGesture(recognizer: UISwipeGestureRecognizer){
+        
     }
     @objc func centerAction(_ sender: Any) {
         guard let mapVC = controller as? MapViewController else { return }
