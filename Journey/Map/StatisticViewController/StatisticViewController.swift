@@ -12,6 +12,8 @@ class StatisticViewController: CardViewController {
 
     var startRouteButton: UIButton!
     var centerButton: UIButton!
+    var viewToStop: UIView!
+    var startButtonFrame: CGRect!
     
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var distanceLabel: UILabel!
@@ -19,19 +21,24 @@ class StatisticViewController: CardViewController {
     @IBOutlet weak var averageSpeedLabel: UILabel!
     @IBOutlet weak var stepsLabel: UILabel!
     
+    var animations = [UIViewPropertyAnimator]()
     override func viewDidLoad() {
         super.viewDidLoad()
         appendButtonsToHandleArea()
     }
-    
-    override func viewDidLayoutSubviews() {
-    }
-    
     func appendButtonsToHandleArea() {
-        let startButtonFrame = CGRect(x: handleArea.bounds.width / 2 - 60, y: 12, width: 120, height: 30)
-        let centerButtonFrame = CGRect(x: handleArea.bounds.width - 12 - 30, y: 12, width: 30, height: 30)
+        startButtonFrame = CGRect(x: handleArea.bounds.width / 2 - 60, y: 0, width: 120, height: 30)
         startRouteButton = UIButton(frame: startButtonFrame)
-        handleArea.addSubview(startRouteButton)
+        let centerButtonFrame = CGRect(x: handleArea.bounds.width - 12 - 30, y: 12, width: 30, height: 30)
+        centerButton = UIButton(frame: centerButtonFrame)
+        let viewToStopBySwipeFrame = CGRect(x: 6, y: 12, width: handleArea.frame.width - centerButton.frame.width - 30, height: 30)
+        viewToStop = UIView(frame: viewToStopBySwipeFrame)
+        
+        handleArea.addSubview(viewToStop)
+        viewToStop.addSubview(startRouteButton)
+        
+        
+        
         startRouteButton.tintColor = .white
         startRouteButton.layer.cornerRadius = 12
         startRouteButton.clipsToBounds = true
@@ -41,10 +48,14 @@ class StatisticViewController: CardViewController {
         startRouteButton.layer.borderColor = .init(srgbRed: 255, green: 255, blue: 255, alpha: 1)
         startRouteButton.addTarget(self, action: #selector(startRouteAction(_:)), for: .touchUpInside)
         
-        centerButton = UIButton(frame: centerButtonFrame)
+        
         handleArea.addSubview(centerButton)
         centerButton.setImage(UIImage(named: "arrow"), for: .normal)
         centerButton.addTarget(self, action: #selector(centerAction(_:)), for: .touchUpInside)
+        
+        
+        
+        
     }
     
     func fill(viewModel: Map.SavingRoute.ViewModel) {
@@ -60,21 +71,80 @@ class StatisticViewController: CardViewController {
         guard let _ = mapVC.mapView.userLocation.location else { return }
         mapVC.saveLocation()
         mapVC.isOnTheWay = true
-        UIView.animate(withDuration: 0.5) { [self] in
-            let frame = CGRect(x: 6, y: 12, width: (button.superview?.frame.width)! - 12 - self.centerButton.frame.width - ((button.superview?.frame.maxX)! - self.centerButton.frame.maxX), height: 30)
-            let panGesture = UIPanGestureRecognizer(target: mapVC, action: #selector(swipeToStopGesture(recognizer: )))
-            
-//            button.transform = CGAffineTransform(translationX: -(self.handleArea.frame.width / 2) + button.frame.width / 2 + 6, y: 0)
-//            button.layer.cornerRadius = 0
-            button.frame = frame
-            button.setTitle("||", for: .normal)
+        UIView.animate(withDuration: 0.5) {
+            button.frame.origin.x = 0
+            button.setTitle("|| ->>>", for: .normal)
+            button.layer.borderWidth = 0
+            self.setPanGesture()
         }
     }
-    @objc func swipeToStopGesture(recognizer: UISwipeGestureRecognizer){
-        
+    private func setPanGesture() {
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(panToStop(recognizer:)))
+        startRouteButton.addGestureRecognizer(panGestureRecognizer)
+    }
+    @objc func panToStop(recognizer: UIPanGestureRecognizer){
+        switch recognizer.state {
+        case .began:
+            startInteractiveTransition(recognizer: recognizer)
+        case .changed:
+            let translation = recognizer.translation(in: viewToStop)
+            let fractionCompleted = translation.x / startRouteButton.bounds.width / 2
+            updateInteractiveTransition(fractionCompleted: fractionCompleted)
+        case .ended:
+            endInteractiveTransition(recognizer: recognizer)
+        default:
+            break
+        }
     }
     @objc func centerAction(_ sender: Any) {
         guard let mapVC = controller as? MapViewController else { return }
         mapVC.getCenterMap()
+    }
+    
+    private func startInteractiveTransition(recognizer: UIPanGestureRecognizer) {
+        if animations.isEmpty {
+            let frameAnimator = UIViewPropertyAnimator(duration: 1, dampingRatio: 1) {
+                self.startRouteButton.frame.origin.x = self.viewToStop.frame.width - self.startRouteButton.frame.width
+            }
+            frameAnimator.addCompletion { _ in
+                self.animations.removeAll()
+            }
+            frameAnimator.startAnimation()
+            animations.append(frameAnimator)
+        }
+        for animator in animations {
+            animator.pauseAnimation()
+        }
+    }
+    private func updateInteractiveTransition(fractionCompleted: CGFloat) {
+        for animator in animations {
+            animator.fractionComplete = fractionCompleted
+        }
+        
+    }
+    private func endInteractiveTransition(recognizer: UIPanGestureRecognizer) {
+        
+        
+        let frameAnimator = UIViewPropertyAnimator(duration: 0.5, dampingRatio: 1) { [self] in
+            if self.animations.first!.fractionComplete < 1{
+            self.startRouteButton.frame.origin.x = 0
+            }
+        }
+        frameAnimator.addCompletion { _ in
+            self.animations.removeAll()
+        }
+        frameAnimator.startAnimation()
+        
+        if animations.first?.fractionComplete == 1 {
+            guard let mapVC = controller as? MapViewController else { return }
+            mapVC.saveRoute()
+            mapVC.isOnTheWay = false
+            UIView.animate(withDuration: 0.3) {
+                self.startRouteButton.frame = self.startButtonFrame
+                self.startRouteButton.setTitle("Start", for: .normal)
+                self.startRouteButton.layer.borderWidth = 2
+            }
+            
+        }
     }
 }
