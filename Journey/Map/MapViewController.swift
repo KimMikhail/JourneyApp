@@ -180,7 +180,8 @@ class MapViewController: UIViewController, MapDisplayLogic {
     }
     
     func saveRoute() {
-        
+        let request = Map.StopSavingRoute.Request(image: nil)
+        interactor?.stopSavingRoute(request: request)
     }
     
     
