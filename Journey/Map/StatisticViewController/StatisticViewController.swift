@@ -37,8 +37,6 @@ class StatisticViewController: CardViewController {
         handleArea.addSubview(viewToStop)
         viewToStop.addSubview(startRouteButton)
         
-        
-        
         startRouteButton.tintColor = .white
         startRouteButton.layer.cornerRadius = 12
         startRouteButton.clipsToBounds = true
@@ -48,16 +46,10 @@ class StatisticViewController: CardViewController {
         startRouteButton.layer.borderColor = .init(srgbRed: 255, green: 255, blue: 255, alpha: 1)
         startRouteButton.addTarget(self, action: #selector(startRouteAction(_:)), for: .touchUpInside)
         
-        
         handleArea.addSubview(centerButton)
         centerButton.setImage(UIImage(named: "arrow"), for: .normal)
         centerButton.addTarget(self, action: #selector(centerAction(_:)), for: .touchUpInside)
-        
-        
-        
-        
     }
-    
     func fill(viewModel: Map.SavingRoute.ViewModel) {
         self.timeLabel.text = viewModel.timeString
         self.distanceLabel.text = "\(viewModel.distance)"
@@ -69,11 +61,10 @@ class StatisticViewController: CardViewController {
         guard let button = sender as? UIButton else { return }
         guard let mapVC = controller as? MapViewController else { return }
         guard let _ = mapVC.mapView.userLocation.location else { return }
-        mapVC.saveLocation()
-        mapVC.isOnTheWay = true
+        mapVC.startRoute()
         UIView.animate(withDuration: 0.5) {
             button.frame.origin.x = 0
-            button.setTitle("|| ->>>", for: .normal)
+            button.setTitle("Slide to stop", for: .normal)
             button.layer.borderWidth = 0
             self.setPanGesture()
         }
@@ -100,7 +91,6 @@ class StatisticViewController: CardViewController {
         guard let mapVC = controller as? MapViewController else { return }
         mapVC.getCenterMap()
     }
-    
     private func startInteractiveTransition(recognizer: UIPanGestureRecognizer) {
         if animations.isEmpty {
             let frameAnimator = UIViewPropertyAnimator(duration: 1, dampingRatio: 1) {
@@ -120,11 +110,8 @@ class StatisticViewController: CardViewController {
         for animator in animations {
             animator.fractionComplete = fractionCompleted
         }
-        
     }
     private func endInteractiveTransition(recognizer: UIPanGestureRecognizer) {
-        
-        
         let frameAnimator = UIViewPropertyAnimator(duration: 0.5, dampingRatio: 1) { [self] in
             if self.animations.first!.fractionComplete < 1{
             self.startRouteButton.frame.origin.x = 0
@@ -134,11 +121,9 @@ class StatisticViewController: CardViewController {
             self.animations.removeAll()
         }
         frameAnimator.startAnimation()
-        
         if animations.first?.fractionComplete == 1 {
             guard let mapVC = controller as? MapViewController else { return }
             mapVC.saveRoute()
-            mapVC.isOnTheWay = false
             startRouteButton.gestureRecognizers?.removeAll()
             UIView.animate(withDuration: 0.3) {
                 self.startRouteButton.frame = self.startButtonFrame
@@ -146,7 +131,6 @@ class StatisticViewController: CardViewController {
                 self.startRouteButton.layer.borderWidth = 2
             }
             clearLabels()
-            
         }
     }
     private func clearLabels(){

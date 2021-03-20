@@ -115,10 +115,6 @@ class MapInteractor: NSObject, MapBusinessLogic, MapDataStore, CLLocationManager
         if route == nil {
             route = Route(coordinates: [LocationCoordinate(lat: location.coordinate.latitude, lon: location.coordinate.longitude)], speeds: [Double(round(location.speed * 3.6 * 10) / 10)], timeStamps: [location.timestamp], averageSpeed: 0, distance: 0, calories: 0, steps: 0)
         }
-//            route = Route(coordinates: [(location.coordinate.latitude,
-//                                                       location.coordinate.longitude)],
-//                                        speeds: [Double(round(location.speed * 3.6 * 10) / 10)],
-//                                        timeStamps: [location.timestamp], averageSpeed: 0, distance: 0, calories: 0, steps: 0)}
         else {
             route?.coordinates.append((LocationCoordinate(lat: location.coordinate.latitude, lon: location.coordinate.longitude)))
             route?.speeds.append(Double(round(location.speed * 3.6 * 10) / 10) > 0 ? Double(round(location.speed * 3.6 * 10) / 10) : 0)

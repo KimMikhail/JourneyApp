@@ -39,15 +39,17 @@ class MapWorker {
             speedSum += speed
         }
         return Double(round(speedSum / Double(speeds.count) * 10) / 10) > 0 ? Double(round(speedSum / Double(speeds.count) * 10) / 10) : 0
-        
     }
-
     func calculateSteps(fromDate date: Date, completion: @escaping (Int) -> ()) {
         
         if CMPedometer.isStepCountingAvailable() {
             
-            self.pedometr.startUpdates(from: date) { (data: CMPedometerData!, error) -> Void in
-                    completion(data.numberOfSteps.intValue)
+            self.pedometr.startUpdates(from: date) { (data: CMPedometerData?, error) -> Void in
+                if error != nil {
+                    return
+                }
+                guard let data = data  else { return }
+                completion(data.numberOfSteps.intValue)
             }
         }
     }
