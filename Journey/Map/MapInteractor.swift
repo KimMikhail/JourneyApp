@@ -71,16 +71,6 @@ class MapInteractor: NSObject, MapBusinessLogic, MapDataStore, CLLocationManager
         }
         presenter?.presentRequestForCurrentLocation(response: response)
     }
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if onMyWay {
-            guard let location = locations.last else { return }
-            appendLocationToRoute(location: location)
-            
-            if route?.coordinates.count == 1 {
-                self.startTimeStamp = Date()
-            }
-        }
-    }
     
     // MARK: Get Current Location
     
