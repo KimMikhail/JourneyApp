@@ -50,7 +50,6 @@ class MapViewController: UIViewController, MapDisplayLogic {
         healthKitRequest()
     }
     override func viewDidLayoutSubviews() {
-        print(#function)
         if statisticViewController == nil {
             setupStatisticView()
         }
