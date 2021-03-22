@@ -20,7 +20,6 @@ protocol MapBusinessLogic {
     func locationServicesRequest(request: Map.LocationServicesRequest.Request)
     func centerMap(request: Map.CenterMap.Request)
     func healthKitRequest(request: Map.HealthKitRequest.Request)
-    func getCurrentLocation(request: Map.GetCurrentLocation.Request)
     func savingRoute(request: Map.SavingRoute.Request)
     func stopSavingRoute(request: Map.StopSavingRoute.Request)
 }
@@ -71,12 +70,23 @@ class MapInteractor: NSObject, MapBusinessLogic, MapDataStore, CLLocationManager
         }
         presenter?.presentRequestForCurrentLocation(response: response)
     }
-    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+            if onMyWay {
+                guard let location = locations.last else { return }
+                appendLocationToRoute(location: location)
+                
+                if route?.coordinates.count == 1 {
+                    self.startTimeStamp = Date()
+                }
+                guard let lastLocation = locations.last else { return }
+                appendLocationToRoute(location: lastLocation)
+                guard let route = route else { return }
+                
+                let response = Map.SavingRoute.Response(route: route)
+                presenter?.presentSavingRoute(response: response)
+            }
+        }
     // MARK: Get Current Location
-    
-    func getCurrentLocation(request: Map.GetCurrentLocation.Request) {
-        
-    }
     // MARK: Center Map
     
     func centerMap(request: Map.CenterMap.Request) {

@@ -155,20 +155,20 @@ class MapViewController: UIViewController, MapDisplayLogic {
 }
 extension MapViewController: MKMapViewDelegate {
     
-    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        if isOnTheWay {
-            let request = Map.SavingRoute.Request(location: userLocation.location!)
-            self.interactor?.savingRoute(request: request)
-            
-        }
-        let request = Map.GetCurrentLocation.Request(success: true)
-        interactor?.getCurrentLocation(request: request)
-    }
-    func mapView(_ mapView: MKMapView, didFailToLocateUserWithError error: Error) {
-        currentLocation = nil
-        let request = Map.GetCurrentLocation.Request(success: false, error: error as NSError)
-        interactor?.getCurrentLocation(request: request)
-    }
+//    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+//        if isOnTheWay {
+//            let request = Map.SavingRoute.Request(location: userLocation.location!)
+//            self.interactor?.savingRoute(request: request)
+//
+//        }
+//        let request = Map.GetCurrentLocation.Request(success: true)
+//        interactor?.getCurrentLocation(request: request)
+//    }
+//    func mapView(_ mapView: MKMapView, didFailToLocateUserWithError error: Error) {
+//        currentLocation = nil
+//        let request = Map.GetCurrentLocation.Request(success: false, error: error as NSError)
+//        interactor?.getCurrentLocation(request: request)
+//    }
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let renderer = MKPolylineRenderer(overlay: overlay)
         renderer.lineWidth = 10
