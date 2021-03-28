@@ -100,6 +100,14 @@
 			path = StatisticViewController;
 			sourceTree = "<group>";
 		};
+		74272D732610A62F001E94EE /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				748118FE25DFEB30003BF714 /* Route.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		74290D2225ED5D1700D93DD1 /* List */ = {
 			isa = PBXGroup;
 			children = (
@@ -135,7 +143,6 @@
 			isa = PBXGroup;
 			children = (
 				74CB501325C2E0A9000DF0EB /* Journey */,
-				742B0D3825FF6A2B00146A57 /* Custom Classes */,
 				74CB501225C2E0A9000DF0EB /* Products */,
 				74256F8425DD2223009261BB /* Frameworks */,
 				CC0B93E175A1C0240150E96B /* Pods */,
@@ -161,6 +168,8 @@
 				74CB501D25C2E0AC000DF0EB /* Assets.xcassets */,
 				74CB501F25C2E0AC000DF0EB /* LaunchScreen.storyboard */,
 				74CB502225C2E0AC000DF0EB /* Info.plist */,
+				74272D732610A62F001E94EE /* Model */,
+				742B0D3825FF6A2B00146A57 /* Custom Classes */,
 			);
 			path = Journey;
 			sourceTree = "<group>";
@@ -174,7 +183,6 @@
 				74E112F125CEBFF1008BA786 /* MapWorker.swift */,
 				74E112F225CEBFF1008BA786 /* MapRouter.swift */,
 				74E112F325CEBFF1008BA786 /* MapModels.swift */,
-				748118FE25DFEB30003BF714 /* Route.swift */,
 				74263F0D25FB91DE004A0755 /* StatisticViewController */,
 			);
 			path = Map;
