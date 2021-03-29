@@ -10,6 +10,8 @@ import UIKit
 
 class RouteTableViewCell: UITableViewCell {
 
+    
+    @IBOutlet weak var photoView: UIImageView!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var stepsLabel: UILabel!

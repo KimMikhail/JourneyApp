@@ -20,7 +20,6 @@ protocol MapBusinessLogic {
     func locationServicesRequest(request: Map.LocationServicesRequest.Request)
     func centerMap(request: Map.CenterMap.Request)
     func healthKitRequest(request: Map.HealthKitRequest.Request)
-    func getCurrentLocation(request: Map.GetCurrentLocation.Request)
     func savingRoute(request: Map.SavingRoute.Request)
     func stopSavingRoute(request: Map.StopSavingRoute.Request)
 }
@@ -72,21 +71,22 @@ class MapInteractor: NSObject, MapBusinessLogic, MapDataStore, CLLocationManager
         presenter?.presentRequestForCurrentLocation(response: response)
     }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if onMyWay {
-            guard let location = locations.last else { return }
-            appendLocationToRoute(location: location)
-            
-            if route?.coordinates.count == 1 {
-                self.startTimeStamp = Date()
+            if onMyWay {
+                guard let location = locations.last else { return }
+                appendLocationToRoute(location: location)
+                
+                if route?.coordinates.count == 1 {
+                    self.startTimeStamp = Date()
+                }
+                guard let lastLocation = locations.last else { return }
+                appendLocationToRoute(location: lastLocation)
+                guard let route = route else { return }
+                
+                let response = Map.SavingRoute.Response(route: route)
+                presenter?.presentSavingRoute(response: response)
             }
         }
-    }
-    
     // MARK: Get Current Location
-    
-    func getCurrentLocation(request: Map.GetCurrentLocation.Request) {
-        
-    }
     // MARK: Center Map
     
     func centerMap(request: Map.CenterMap.Request) {
@@ -125,10 +125,6 @@ class MapInteractor: NSObject, MapBusinessLogic, MapDataStore, CLLocationManager
         if route == nil {
             route = Route(coordinates: [LocationCoordinate(lat: location.coordinate.latitude, lon: location.coordinate.longitude)], speeds: [Double(round(location.speed * 3.6 * 10) / 10)], timeStamps: [location.timestamp], averageSpeed: 0, distance: 0, calories: 0, steps: 0)
         }
-//            route = Route(coordinates: [(location.coordinate.latitude,
-//                                                       location.coordinate.longitude)],
-//                                        speeds: [Double(round(location.speed * 3.6 * 10) / 10)],
-//                                        timeStamps: [location.timestamp], averageSpeed: 0, distance: 0, calories: 0, steps: 0)}
         else {
             route?.coordinates.append((LocationCoordinate(lat: location.coordinate.latitude, lon: location.coordinate.longitude)))
             route?.speeds.append(Double(round(location.speed * 3.6 * 10) / 10) > 0 ? Double(round(location.speed * 3.6 * 10) / 10) : 0)

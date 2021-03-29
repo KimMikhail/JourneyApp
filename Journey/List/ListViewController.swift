@@ -110,7 +110,10 @@ extension ListViewController {
             cell.stepsLabel.text = "\(route.steps)"
             if let imageData = route.imageData {
                 let image = UIImage(data: imageData)
-                cell.imageView?.image = image
+                cell.photoView?.image = image
+            } else {
+                cell.photoView?.image = UIImage(named: "LaunchScreen")
+                cell.photoView.contentMode = .scaleAspectFill
             }
             
             return cell
