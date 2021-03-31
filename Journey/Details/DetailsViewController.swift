@@ -18,7 +18,7 @@ protocol DetailsDisplayLogic: class {
 
 class DetailsViewController: UIViewController, DetailsDisplayLogic {
     
-    //@IBOutlet private var nameTextField: UITextField!
+    @IBOutlet var collectionView: UICollectionView!
     
     var interactor: DetailsBusinessLogic?
     var router: (NSObjectProtocol & DetailsRoutingLogic & DetailsDataPassing)?
@@ -40,6 +40,11 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic {
     override func viewDidLoad() {
         super.viewDidLoad()
         doSomething()
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(UINib(nibName: "PhotoCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "PhotoCell")
+        collectionView.register(UINib(nibName: "StatisticCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "StatisticCell")
+        collectionView.register(UINib(nibName: "ImageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "ImageCell")
     }
     
     // MARK: Routing
@@ -61,7 +66,6 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic {
     }
     
     func displaySomething(viewModel: Details.Something.ViewModel) {
-        //nameTextField.text = viewModel.name
     }
     // MARK: Setup
     
@@ -76,5 +80,45 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic {
         presenter.viewController = viewController
         router.viewController = viewController
         router.dataStore = interactor
+    }
+}
+
+
+extension DetailsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        3
+    }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        switch section {
+        case 2:
+            return 10
+        default:
+            return 1
+        }
+    }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        var cell = UICollectionViewCell()
+        switch indexPath.section {
+        case 0:
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as! ImageCollectionViewCell
+        case 1:
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StatisticCell", for: indexPath) as! StatisticCollectionViewCell
+        case 2:
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCollectionViewCell
+        default:
+            break
+        }
+        return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        switch indexPath.section {
+        case 0:
+            return CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+        case 1:
+            return CGSize(width: UIScreen.main.bounds.width, height: 180)
+        default:
+            return CGSize(width: 120, height: 120)
+        }
     }
 }
