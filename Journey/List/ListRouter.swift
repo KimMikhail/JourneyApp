@@ -13,7 +13,7 @@
 import UIKit
 
 @objc protocol ListRoutingLogic {
-    //func routeToSomewhere(segue: UIStoryboardSegue?)
+    func routeToDetails(segue: UIStoryboardSegue?, route: Route)
 }
 
 protocol ListDataPassing {
@@ -27,29 +27,24 @@ class ListRouter: NSObject, ListRoutingLogic, ListDataPassing {
     
     // MARK: Routing
     
-    func routeToSomewhere(segue: UIStoryboardSegue?) {
-      if let segue = segue {
-        let destinationVC = segue.destination as! DetailsViewController
-        var destinationDS = destinationVC.router!.dataStore!
-        passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-      } else {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let destinationVC = storyboard.instantiateViewController(withIdentifier: "DetailsViewController") as! DetailsViewController
-        var destinationDS = destinationVC.router!.dataStore!
-        passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-        navigateToSomewhere(source: viewController!, destination: destinationVC)
-      }
+    func routeToDetails(segue: UIStoryboardSegue?, route: Route) {
+        
+        guard let destinationVC = segue?.destination as? DetailsViewController else { return }
+        guard var destinationDS = destinationVC.router?.dataStore else { return }
+        passDataToDetails(source: dataStore!, destination: &destinationDS, route: route)
+        navigateToDetails(source: viewController!, destination: destinationVC)
     }
     
     // MARK: Navigation
     
-    func navigateToSomewhere(source: ListViewController, destination: DetailsViewController) {
-      source.show(destination, sender: nil)
+    func navigateToDetails(source: ListViewController, destination: DetailsViewController) {
+        source.performSegue(withIdentifier: "DetailsSegue", sender: source)
     }
     
     // MARK: Passing data
     
-    func passDataToSomewhere(source: ListDataStore, destination: inout DetailsDataStore) {
-        
+    func passDataToDetails(source: ListDataStore, destination: inout DetailsDataStore, route: Route?) {
+        guard let route = route else { return }
+        destination.route = route
     }
 }

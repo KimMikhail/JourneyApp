@@ -126,13 +126,14 @@ extension ListViewController {
     }
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            print("delete")
             
             let request = ListOfRoutes.DeleteRow.Request(route: routes[indexPath.row])
             interactor?.deleteRow(request: request)
         }
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let route = routes[indexPath.row]
+        router?.routeToDetails(segue: UIStoryboardSegue(identifier: "DetailsSegue", source: self, destination: DetailsViewController()), route: route)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

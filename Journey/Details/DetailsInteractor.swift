@@ -17,14 +17,15 @@ protocol DetailsBusinessLogic {
 }
 
 protocol DetailsDataStore {
-//    var name: String { get set }
+    var route: Route? { get set }
 }
 
 class DetailsInteractor: DetailsBusinessLogic, DetailsDataStore {
+    var route: Route?
+    
     
     var presenter: DetailsPresentationLogic?
     var worker: DetailsWorker?
-    //var name: String = ""
     
     // MARK: Do something
     
