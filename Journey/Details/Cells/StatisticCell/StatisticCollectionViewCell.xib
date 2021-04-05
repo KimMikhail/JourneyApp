@@ -5,6 +5,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -16,10 +17,27 @@
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                 <rect key="frame" x="0.0" y="0.0" width="375" height="210"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zKk-BD-YZd">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="210"/>
+                        <color key="backgroundColor" systemColor="systemYellowColor"/>
+                    </view>
+                </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="zKk-BD-YZd" secondAttribute="trailing" id="Te6-UN-5wJ"/>
+                <constraint firstItem="zKk-BD-YZd" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="aRS-zf-fGA"/>
+                <constraint firstItem="zKk-BD-YZd" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="awO-9I-wFV"/>
+                <constraint firstAttribute="bottom" secondItem="zKk-BD-YZd" secondAttribute="bottom" id="kAM-cy-4dL"/>
+            </constraints>
             <size key="customSize" width="375" height="210"/>
-            <point key="canvasLocation" x="141" y="123"/>
+            <point key="canvasLocation" x="373.1884057971015" y="137.94642857142856"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>

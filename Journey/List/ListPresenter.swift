@@ -16,6 +16,7 @@ import RealmSwift
 protocol ListPresentationLogic {
     func presentRoutes(response: ListOfRoutes.DisplayRoutes.Response)
     func presentDeleteRoute(response: ListOfRoutes.DeleteRow.Response)
+    func presentRouteDetails()
 }
 
 class ListPresenter: ListPresentationLogic {
@@ -31,5 +32,8 @@ class ListPresenter: ListPresentationLogic {
     func presentDeleteRoute(response: ListOfRoutes.DeleteRow.Response) {
         let viewModel = ListOfRoutes.DeleteRow.ViewModel(routes: response.routes)
         viewController?.displayDeleteRoute(viewModel: viewModel)
+    }
+    func presentRouteDetails() {
+        viewController?.displayRouteDetails()
     }
 }

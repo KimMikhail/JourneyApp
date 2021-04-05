@@ -16,6 +16,7 @@ import RealmSwift
 protocol ListDisplayLogic: class {
     func displayRoutes(viewModel: ListOfRoutes.DisplayRoutes.ViewModel)
     func displayDeleteRoute(viewModel: ListOfRoutes.DeleteRow.ViewModel)
+    func displayRouteDetails()
 }
 
 class ListViewController: UITableViewController, ListDisplayLogic {
@@ -70,13 +71,15 @@ class ListViewController: UITableViewController, ListDisplayLogic {
     }
     
     func displayRoutes(viewModel: ListOfRoutes.DisplayRoutes.ViewModel) {
-        
         routes = viewModel.routes
         tableView.reloadData()
     }
     func displayDeleteRoute(viewModel: ListOfRoutes.DeleteRow.ViewModel) {
         routes = viewModel.routes
         tableView.reloadData()
+    }
+    func displayRouteDetails() {
+        performSegue(withIdentifier: "Details", sender: self)
     }
     
     // MARK: Setup
@@ -132,11 +135,9 @@ extension ListViewController {
         }
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let route = routes[indexPath.row]
-        router?.routeToDetails(segue: UIStoryboardSegue(identifier: "DetailsSegue", source: self, destination: DetailsViewController()), route: route)
+        interactor?.select(row: indexPath.row)
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
     
     private func getTimeString(timeInterval: TimeInterval) -> String {
         let ti = Int(timeInterval)

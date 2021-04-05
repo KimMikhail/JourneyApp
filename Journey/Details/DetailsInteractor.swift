@@ -13,7 +13,7 @@
 import UIKit
 
 protocol DetailsBusinessLogic {
-    func doSomething(request: Details.Something.Request)
+    func prepareData(request: Details.FillView.Request)
 }
 
 protocol DetailsDataStore {
@@ -27,13 +27,15 @@ class DetailsInteractor: DetailsBusinessLogic, DetailsDataStore {
     var presenter: DetailsPresentationLogic?
     var worker: DetailsWorker?
     
-    // MARK: Do something
-    
-    func doSomething(request: Details.Something.Request) {
-        worker = DetailsWorker()
-        worker?.doSomeWork()
+    func prepareData(request: Details.FillView.Request) {
         
-        let response = Details.Something.Response()
-        presenter?.presentSomething(response: response)
+        guard let route = route else { return }
+        print("interactor in")
+        guard let from = route.timeStamps.first, let to = route.timeStamps.last else { return }
+        worker = DetailsWorker()
+        let photos = worker?.getPhotos(fromDate: from, toDate: to)
+        let response = Details.FillView.Response(route: route, photos: photos)
+        presenter?.presentData(response: response)
+        print("interactor out")
     }
 }

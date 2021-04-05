@@ -11,35 +11,48 @@
 //
 
 import UIKit
-
 protocol DetailsDisplayLogic: class {
-    func displaySomething(viewModel: Details.Something.ViewModel)
+    func displayData(viewModel: Details.FillView.ViewModel)
 }
 
 class DetailsViewController: UIViewController, DetailsDisplayLogic {
     
     @IBOutlet var collectionView: UICollectionView!
     
+    var photos = [UIImage]()
+    
     var interactor: DetailsBusinessLogic?
     var router: (NSObjectProtocol & DetailsRoutingLogic & DetailsDataPassing)?
     
     // MARK: Object lifecycle
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        print("init by coder")
         setup()
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        print("init by nib")
         setup()
+    }
+    
+    
+    
+    deinit {
+        print("deinit")
     }
     
     // MARK: View lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        doSomething()
+        setupCollectionView()
+        fillView()
+    }
+    
+    func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(UINib(nibName: "PhotoCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "PhotoCell")
@@ -60,12 +73,15 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic {
     
     // MARK: Do something
     
-    func doSomething() {
-        let request = Details.Something.Request()
-        interactor?.doSomething(request: request)
+    func fillView() {
+        let request = Details.FillView.Request()
+        interactor?.prepareData(request: request)
     }
     
-    func displaySomething(viewModel: Details.Something.ViewModel) {
+    func displayData(viewModel: Details.FillView.ViewModel) {
+        guard let photos = viewModel.photos else { return }
+        self.photos = photos
+        print("in display data \(self.photos.count)")
     }
     // MARK: Setup
     
@@ -92,24 +108,30 @@ extension DetailsViewController: UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 2:
-            return 10
+            return photos.count
         default:
             return 1
         }
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        var cell = UICollectionViewCell()
         switch indexPath.section {
         case 0:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as! ImageCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as! ImageCollectionViewCell
+            cell.backgroundColor = .red
+            return cell
         case 1:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StatisticCell", for: indexPath) as! StatisticCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StatisticCell", for: indexPath) as! StatisticCollectionViewCell
+            cell.backgroundColor = .yellow
+            return cell
         case 2:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCollectionViewCell
+            cell.backgroundColor = .green
+            cell.imageView.image = photos[indexPath.row]
+            return cell
         default:
             break
         }
-        return cell
+        return UICollectionViewCell()
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch indexPath.section {
@@ -118,7 +140,7 @@ extension DetailsViewController: UICollectionViewDelegate, UICollectionViewDataS
         case 1:
             return CGSize(width: UIScreen.main.bounds.width, height: 180)
         default:
-            return CGSize(width: 120, height: 120)
+            return CGSize(width: UIScreen.main.bounds.width / 3 - 7, height: UIScreen.main.bounds.width / 3 - 7)
         }
     }
 }

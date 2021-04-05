@@ -13,7 +13,7 @@
 import UIKit
 
 @objc protocol ListRoutingLogic {
-    func routeToDetails(segue: UIStoryboardSegue?, route: Route)
+    func routeToDetails(segue: UIStoryboardSegue?)
 }
 
 protocol ListDataPassing {
@@ -27,24 +27,24 @@ class ListRouter: NSObject, ListRoutingLogic, ListDataPassing {
     
     // MARK: Routing
     
-    func routeToDetails(segue: UIStoryboardSegue?, route: Route) {
+    func routeToDetails(segue: UIStoryboardSegue?) {
         
-        guard let destinationVC = segue?.destination as? DetailsViewController else { return }
-        guard var destinationDS = destinationVC.router?.dataStore else { return }
-        passDataToDetails(source: dataStore!, destination: &destinationDS, route: route)
-        navigateToDetails(source: viewController!, destination: destinationVC)
+        if let segue = segue {
+            let destinationVC = segue.destination as! DetailsViewController
+            var destinationDS = destinationVC.router!.dataStore!
+            passDataToDetails(source: dataStore!, destination: &destinationDS)
+        }
     }
     
     // MARK: Navigation
     
     func navigateToDetails(source: ListViewController, destination: DetailsViewController) {
-        source.performSegue(withIdentifier: "DetailsSegue", sender: source)
+        source.show(destination, sender: nil)
     }
     
     // MARK: Passing data
     
-    func passDataToDetails(source: ListDataStore, destination: inout DetailsDataStore, route: Route?) {
-        guard let route = route else { return }
-        destination.route = route
+    func passDataToDetails(source: ListDataStore, destination: inout DetailsDataStore) {
+        destination.route = source.selectedRoute
     }
 }

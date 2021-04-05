@@ -15,14 +15,18 @@ import UIKit
 enum Details {
     // MARK: Use cases
     
-    enum Something {
+    enum FillView {
         struct Request {
         }
         
         struct Response {
+            var route: Route
+            var photos: [UIImage]?
         }
         
         struct ViewModel {
+            var route: Route
+            var photos: [UIImage]?
         }
     }
 }

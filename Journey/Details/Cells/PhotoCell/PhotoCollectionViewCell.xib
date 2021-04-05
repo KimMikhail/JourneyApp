@@ -5,20 +5,46 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoCell" id="gTV-IL-0wX" customClass="PhotoCollectionViewCell" customModule="Journey" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+            <rect key="frame" x="0.0" y="0.0" width="150" height="131"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                <rect key="frame" x="0.0" y="0.0" width="150" height="131"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EDe-eV-cz5">
+                        <rect key="frame" x="0.0" y="0.0" width="150" height="131"/>
+                        <color key="backgroundColor" systemColor="systemGreenColor"/>
+                    </imageView>
+                </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
-            <point key="canvasLocation" x="139" y="85"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="EDe-eV-cz5" secondAttribute="bottom" id="6ct-jJ-4HF"/>
+                <constraint firstAttribute="trailing" secondItem="EDe-eV-cz5" secondAttribute="trailing" id="BZN-RB-729"/>
+                <constraint firstAttribute="trailing" secondItem="EDe-eV-cz5" secondAttribute="trailing" id="J6A-ET-pgo"/>
+                <constraint firstAttribute="bottom" secondItem="EDe-eV-cz5" secondAttribute="bottom" id="X0P-at-W5L"/>
+                <constraint firstItem="EDe-eV-cz5" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="c1j-Cm-3ap"/>
+                <constraint firstItem="EDe-eV-cz5" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="sM3-K8-fhj"/>
+                <constraint firstItem="EDe-eV-cz5" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="uFH-6l-Qlv"/>
+                <constraint firstItem="EDe-eV-cz5" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="vxs-Fq-emD"/>
+            </constraints>
+            <size key="customSize" width="150" height="131"/>
+            <connections>
+                <outlet property="imageView" destination="EDe-eV-cz5" id="izi-9o-bUj"/>
+            </connections>
+            <point key="canvasLocation" x="65.217391304347828" y="111.49553571428571"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>
