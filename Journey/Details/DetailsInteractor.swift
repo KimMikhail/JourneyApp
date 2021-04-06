@@ -30,12 +30,10 @@ class DetailsInteractor: DetailsBusinessLogic, DetailsDataStore {
     func prepareData(request: Details.FillView.Request) {
         
         guard let route = route else { return }
-        print("interactor in")
         guard let from = route.timeStamps.first, let to = route.timeStamps.last else { return }
         worker = DetailsWorker()
         let photos = worker?.getPhotos(fromDate: from, toDate: to)
         let response = Details.FillView.Response(route: route, photos: photos)
         presenter?.presentData(response: response)
-        print("interactor out")
     }
 }

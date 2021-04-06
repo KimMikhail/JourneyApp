@@ -28,22 +28,13 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        print("init by coder")
         setup()
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        print("init by nib")
         setup()
     }
-    
-    
-    
-    deinit {
-        print("deinit")
-    }
-    
     // MARK: View lifecycle
     
     override func viewDidLoad() {
@@ -58,6 +49,9 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic {
         collectionView.register(UINib(nibName: "PhotoCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "PhotoCell")
         collectionView.register(UINib(nibName: "StatisticCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "StatisticCell")
         collectionView.register(UINib(nibName: "ImageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "ImageCell")
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width / 3 - 7, height: UIScreen.main.bounds.width / 3 - 7)
+        collectionView.collectionViewLayout = layout
     }
     
     // MARK: Routing
@@ -81,7 +75,6 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic {
     func displayData(viewModel: Details.FillView.ViewModel) {
         guard let photos = viewModel.photos else { return }
         self.photos = photos
-        print("in display data \(self.photos.count)")
     }
     // MARK: Setup
     
@@ -125,7 +118,6 @@ extension DetailsViewController: UICollectionViewDelegate, UICollectionViewDataS
             return cell
         case 2:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCollectionViewCell
-            cell.backgroundColor = .green
             cell.imageView.image = photos[indexPath.row]
             return cell
         default:

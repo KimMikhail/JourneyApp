@@ -41,7 +41,7 @@ class DetailsWorker {
                         if let imageData = imageData {
                             if let image = UIImage(data: imageData) {
                                 // Add the returned image to your array
-                                images += [image]
+                                images.append(image)
                             }
                         }
                         if images.count == fetchResult.count {
@@ -57,47 +57,3 @@ class DetailsWorker {
         return images
         }
 }
-
-
-/*
- func fetchPhotosInRange(startDate:NSDate, endDate:NSDate) {
-
-         let imgManager = PHImageManager.default()
-
-         let requestOptions = PHImageRequestOptions()
-         requestOptions.isSynchronous = true
-         requestOptions.isNetworkAccessAllowed = true
-
-         // Fetch the images between the start and end date
-         let fetchOptions = PHFetchOptions()
-         fetchOptions.predicate = NSPredicate(format: "creationDate > %@ AND creationDate < %@", startDate, endDate)
-
-         images = []
-
-         let fetchResult: PHFetchResult = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: fetchOptions)
-         // If the fetch result isn't empty,
-         // proceed with the image request
-         if fetchResult.count > 0 {
-             // Perform the image request
-             for index in 0  ..< fetchResult.count  {
-                 let asset = fetchResult.object(at: index)
-                 imgManager.requestImageData(for: asset, options: requestOptions, resultHandler: { (imageData: Data?, dataUTI: String?, orientation: UIImageOrientation, info: [AnyHashable : Any]?) -> Void in
-                     if let imageData = imageData {
-                         if let image = UIImage(data: imageData) {
-                             // Add the returned image to your array
-                             self.images += [image]
-                         }
-                     }
-                     if self.images.count == fetchResult.count {
-                         // Do something once all the images
-                         // have been fetched. (This if statement
-                         // executes as long as all the images
-                         // are found; but you should also handle
-                         // the case where they're not all found.)
-                         print(self.images)
-                     }
-                 })
-             }
-         }
-     }
-*/
