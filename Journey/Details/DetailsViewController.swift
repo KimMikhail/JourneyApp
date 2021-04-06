@@ -138,8 +138,9 @@ extension DetailsViewController: UICollectionViewDelegate, UICollectionViewDataS
             if routeImage != nil {
                 cell.imageView.image = routeImage!
             } else {
-                cell.imageView.image = UIImage(named: "LaunchScreen")
                 cell.imageView.contentMode = .scaleAspectFill
+                cell.imageView.image = UIImage(named: "LaunchScreen")
+                
             }
             return cell
         case 1:
