@@ -12,15 +12,19 @@
 
 import UIKit
 protocol DetailsDisplayLogic: class {
-    func displayData(viewModel: Details.FillView.ViewModel)
+    func displayImage(viewModel: Details.SetImage.ViewModel)
+    func displayStats(viewModel: Details.SetStatistic.ViewModel)
+    func displayData(viewModel: Details.ShowPhotos.ViewModel)
 }
 
 class DetailsViewController: UIViewController, DetailsDisplayLogic {
     
     @IBOutlet var collectionView: UICollectionView!
     
+    var route: Route?
+    var routeImage: UIImage?
     var photos = [UIImage]()
-    
+    var statsCell: StatisticCollectionViewCell!
     var interactor: DetailsBusinessLogic?
     var router: (NSObjectProtocol & DetailsRoutingLogic & DetailsDataPassing)?
     
@@ -40,9 +44,14 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
-        fillView()
+        setImage()
+        setStats()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        fillPhotos()
+    }
     func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -66,15 +75,31 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic {
     }
     
     // MARK: Do something
-    
-    func fillView() {
-        let request = Details.FillView.Request()
+    func setStats() {
+        let request = Details.SetStatistic.Request()
+        interactor?.prepareStats(request: request)
+    }
+    func displayStats(viewModel: Details.SetStatistic.ViewModel) {
+        route = viewModel.route
+        collectionView.reloadSections(IndexSet(integer: 1))
+    }
+    func setImage() {
+        let request = Details.SetImage.Request()
+        interactor?.prepareImage(request: request)
+    }
+    func displayImage(viewModel: Details.SetImage.ViewModel) {
+        routeImage = viewModel.image
+        collectionView.reloadData()
+    }
+    func fillPhotos() {
+        let request = Details.ShowPhotos.Request()
         interactor?.prepareData(request: request)
     }
     
-    func displayData(viewModel: Details.FillView.ViewModel) {
+    func displayData(viewModel: Details.ShowPhotos.ViewModel) {
         guard let photos = viewModel.photos else { return }
         self.photos = photos
+        collectionView.reloadData()
     }
     // MARK: Setup
     
@@ -110,12 +135,20 @@ extension DetailsViewController: UICollectionViewDelegate, UICollectionViewDataS
         switch indexPath.section {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as! ImageCollectionViewCell
-            cell.backgroundColor = .red
+            if routeImage != nil {
+                cell.imageView.image = routeImage!
+            } else {
+                cell.imageView.image = UIImage(named: "LaunchScreen")
+                cell.imageView.contentMode = .scaleAspectFill
+            }
             return cell
         case 1:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StatisticCell", for: indexPath) as! StatisticCollectionViewCell
-            cell.backgroundColor = .yellow
-            return cell
+            statsCell = collectionView.dequeueReusableCell(withReuseIdentifier: "StatisticCell", for: indexPath) as? StatisticCollectionViewCell
+            guard let route = route else {
+                return statsCell
+            }
+            statsCell.fillCell(route: route)
+            return statsCell
         case 2:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCollectionViewCell
             cell.imageView.image = photos[indexPath.row]
@@ -130,9 +163,18 @@ extension DetailsViewController: UICollectionViewDelegate, UICollectionViewDataS
         case 0:
             return CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
         case 1:
-            return CGSize(width: UIScreen.main.bounds.width, height: 180)
+            return CGSize(width: UIScreen.main.bounds.width, height: 120)
         default:
-            return CGSize(width: UIScreen.main.bounds.width / 3 - 7, height: UIScreen.main.bounds.width / 3 - 7)
+            return CGSize(width: UIScreen.main.bounds.width / 3 - 1 , height: UIScreen.main.bounds.width / 3 - 1)
         }
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        1
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        1.5
     }
 }

@@ -24,10 +24,10 @@
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
-                <constraint firstItem="U39-fY-efc" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="IcB-zo-dJ9"/>
-                <constraint firstItem="U39-fY-efc" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="MM5-r0-A7C"/>
-                <constraint firstAttribute="trailing" secondItem="U39-fY-efc" secondAttribute="trailing" id="Uqc-GX-HE8"/>
-                <constraint firstAttribute="bottom" secondItem="U39-fY-efc" secondAttribute="bottom" id="xES-zr-1OF"/>
+                <constraint firstItem="U39-fY-efc" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="65h-rQ-z2z"/>
+                <constraint firstAttribute="trailing" secondItem="U39-fY-efc" secondAttribute="trailing" id="DSf-9P-p44"/>
+                <constraint firstAttribute="top" secondItem="U39-fY-efc" secondAttribute="top" id="T8W-R2-mX3"/>
+                <constraint firstAttribute="bottom" secondItem="U39-fY-efc" secondAttribute="bottom" id="fCu-Kg-cJI"/>
             </constraints>
             <size key="customSize" width="367" height="306"/>
             <connections>

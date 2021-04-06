@@ -15,7 +15,28 @@ import UIKit
 enum Details {
     // MARK: Use cases
     
-    enum FillView {
+    enum SetStatistic {
+        struct Request {
+        }
+        struct Response {
+            var route: Route
+        }
+        struct ViewModel {
+            var route: Route
+        }
+    }
+    enum SetImage {
+        struct Request {
+        }
+        struct Response {
+            var image: UIImage
+        }
+        
+        struct ViewModel {
+            var image: UIImage
+        }
+    }
+    enum ShowPhotos {
         struct Request {
         }
         

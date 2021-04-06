@@ -13,7 +13,9 @@
 import UIKit
 
 protocol DetailsBusinessLogic {
-    func prepareData(request: Details.FillView.Request)
+    func prepareImage(request: Details.SetImage.Request)
+    func prepareStats(request: Details.SetStatistic.Request)
+    func prepareData(request: Details.ShowPhotos.Request)
 }
 
 protocol DetailsDataStore {
@@ -27,13 +29,24 @@ class DetailsInteractor: DetailsBusinessLogic, DetailsDataStore {
     var presenter: DetailsPresentationLogic?
     var worker: DetailsWorker?
     
-    func prepareData(request: Details.FillView.Request) {
+    func prepareStats(request: Details.SetStatistic.Request) {
+        guard let route = route else { return }
+        let response = Details.SetStatistic.Response(route: route)
+        presenter?.presentStats(response: response)
+    }
+    func prepareImage(request: Details.SetImage.Request) {
+        guard let data = route?.imageData, let image = UIImage(data: data) else { return }
+        let response = Details.SetImage.Response(image: image)
+        presenter?.presentImage(response: response)
+    }
+    
+    func prepareData(request: Details.ShowPhotos.Request) {
         
         guard let route = route else { return }
         guard let from = route.timeStamps.first, let to = route.timeStamps.last else { return }
         worker = DetailsWorker()
         let photos = worker?.getPhotos(fromDate: from, toDate: to)
-        let response = Details.FillView.Response(route: route, photos: photos)
+        let response = Details.ShowPhotos.Response(route: route, photos: photos)
         presenter?.presentData(response: response)
     }
 }

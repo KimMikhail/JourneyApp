@@ -31,16 +31,12 @@ class DetailsWorker {
             images = []
 
             let fetchResult: PHFetchResult = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: fetchOptions)
-            // If the fetch result isn't empty,
-            // proceed with the image request
             if fetchResult.count > 0 {
-                // Perform the image request
                 for index in 0  ..< fetchResult.count  {
                     let asset = fetchResult.object(at: index)
                     imageManager.requestImageDataAndOrientation(for: asset, options: requestOptions) { (imageData: Data?, dataUTI: String?, orientation: CGImagePropertyOrientation, info: [AnyHashable : Any]?) -> Void in
                         if let imageData = imageData {
                             if let image = UIImage(data: imageData) {
-                                // Add the returned image to your array
                                 images.append(image)
                             }
                         }
