@@ -44,8 +44,8 @@ class Route: Object {
 }
 
 class LocationCoordinate: Object{
-    var lat: Double = 0
-    var lon: Double = 0
+    @objc dynamic var lat: Double = 0
+    @objc dynamic var lon: Double = 0
     init(lat: Double, lon: Double) {
         self.lat = lat
         self.lon = lon

@@ -11,11 +11,13 @@
 //
 
 import UIKit
+import CoreLocation
 
 protocol DetailsBusinessLogic {
     func prepareImage(request: Details.SetImage.Request)
     func prepareStats(request: Details.SetStatistic.Request)
     func preparePhotos(request: Details.ShowPhotos.Request)
+    func prepareMap(request: Details.SetMap.Request)
 }
 
 protocol DetailsDataStore {
@@ -48,5 +50,14 @@ class DetailsInteractor: DetailsBusinessLogic, DetailsDataStore {
         let photos = worker?.getPhotos(fromDate: from, toDate: to)
         let response = Details.ShowPhotos.Response(route: route, photos: photos)
         presenter?.presentData(response: response)
+    }
+    func prepareMap(request: Details.SetMap.Request) {
+        guard let route = route else { return }
+        var coordinates = [CLLocationCoordinate2D]()
+        for loc in route.coordinates {
+            coordinates.append(CLLocationCoordinate2D(latitude: loc.lat, longitude: loc.lon))
+        }
+        let response = Details.SetMap.Response(coordinates: coordinates)
+        presenter?.presentMap(response: response)
     }
 }

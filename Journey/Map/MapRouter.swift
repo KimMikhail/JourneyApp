@@ -53,7 +53,6 @@ class MapRouter: NSObject, MapRoutingLogic, MapDataPassing {
     
     func passDataToRouteList(source: MapDataStore, destination: inout ListDataStore) {
         guard let route = source.route else { return }
-        
         ListWorker.saveRoute(route)
     }
 }

@@ -11,6 +11,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 enum Details {
     // MARK: Use cases
@@ -48,6 +49,16 @@ enum Details {
         struct ViewModel {
             var route: Route
             var photos: [UIImage]?
+        }
+    }
+    enum SetMap {
+        struct Request {
+        }
+        struct Response {
+            var coordinates: [CLLocationCoordinate2D]
+        }
+        struct ViewModel {
+            var coordinates: [CLLocationCoordinate2D]
         }
     }
 }

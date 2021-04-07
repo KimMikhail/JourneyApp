@@ -16,6 +16,7 @@ protocol DetailsPresentationLogic {
     func presentImage(response: Details.SetImage.Response)
     func presentStats(response: Details.SetStatistic.Response)
     func presentData(response: Details.ShowPhotos.Response)
+    func presentMap(response: Details.SetMap.Response)
 }
 
 class DetailsPresenter: DetailsPresentationLogic {
@@ -35,6 +36,9 @@ class DetailsPresenter: DetailsPresentationLogic {
         let viewModel = Details.ShowPhotos.ViewModel(route: response.route, photos: response.photos)
         viewController?.displayData(viewModel: viewModel)
     }
-    
+    func presentMap(response: Details.SetMap.Response) {
+        let viewModel = Details.SetMap.ViewModel(coordinates: response.coordinates)
+        viewController?.displayMap(viewModel: viewModel)
+    }
     
 }

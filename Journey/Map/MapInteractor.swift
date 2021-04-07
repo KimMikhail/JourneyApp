@@ -78,10 +78,7 @@ class MapInteractor: NSObject, MapBusinessLogic, MapDataStore, CLLocationManager
                 if route?.coordinates.count == 1 {
                     self.startTimeStamp = Date()
                 }
-                guard let lastLocation = locations.last else { return }
-                appendLocationToRoute(location: lastLocation)
                 guard let route = route else { return }
-                
                 let response = Map.SavingRoute.Response(route: route)
                 presenter?.presentSavingRoute(response: response)
             }
@@ -114,9 +111,7 @@ class MapInteractor: NSObject, MapBusinessLogic, MapDataStore, CLLocationManager
     
     func savingRoute(request: Map.SavingRoute.Request) {
         if !onMyWay { onMyWay.toggle() }
-        appendLocationToRoute(location: request.location)
         guard let route = route else { return }
-        
         let response = Map.SavingRoute.Response(route: route)
         presenter?.presentSavingRoute(response: response)
     }

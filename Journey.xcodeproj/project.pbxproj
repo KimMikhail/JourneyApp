@@ -43,6 +43,8 @@
 		74E112F925CEBFF1008BA786 /* MapModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E112F325CEBFF1008BA786 /* MapModels.swift */; };
 		74E112FA25CEBFF1008BA786 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E112F425CEBFF1008BA786 /* MapViewController.swift */; };
 		74E112FB25CEBFF1008BA786 /* MapInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E112F525CEBFF1008BA786 /* MapInteractor.swift */; };
+		74FCC002261DCA96006F5C2A /* MapCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FCC000261DCA96006F5C2A /* MapCollectionViewCell.swift */; };
+		74FCC003261DCA96006F5C2A /* MapCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74FCC001261DCA96006F5C2A /* MapCollectionViewCell.xib */; };
 		CBC050E1E49F4997486D1C89 /* Pods_Journey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7AB8E8401C1ECBC611ACCF5 /* Pods_Journey.framework */; };
 /* End PBXBuildFile section */
 
@@ -86,6 +88,8 @@
 		74E112F325CEBFF1008BA786 /* MapModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapModels.swift; sourceTree = "<group>"; };
 		74E112F425CEBFF1008BA786 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		74E112F525CEBFF1008BA786 /* MapInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapInteractor.swift; sourceTree = "<group>"; };
+		74FCC000261DCA96006F5C2A /* MapCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCollectionViewCell.swift; sourceTree = "<group>"; };
+		74FCC001261DCA96006F5C2A /* MapCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapCollectionViewCell.xib; sourceTree = "<group>"; };
 		905AFE073765E5E1EFE860E0 /* Pods-Journey.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Journey.debug.xcconfig"; path = "Target Support Files/Pods-Journey/Pods-Journey.debug.xcconfig"; sourceTree = "<group>"; };
 		C7AB8E8401C1ECBC611ACCF5 /* Pods_Journey.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Journey.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2CB9499D771C7A37026B245 /* Pods-Journey.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Journey.release.xcconfig"; path = "Target Support Files/Pods-Journey/Pods-Journey.release.xcconfig"; sourceTree = "<group>"; };
@@ -171,6 +175,7 @@
 		749F372B261484B2002DEB20 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				74FCBFFF261DCA82006F5C2A /* mapCell */,
 				749F372C261484FA002DEB20 /* ImageCell */,
 				749F373226148519002DEB20 /* StatisticCell */,
 				749F373326148524002DEB20 /* PhotoCell */,
@@ -264,6 +269,15 @@
 			path = Map;
 			sourceTree = "<group>";
 		};
+		74FCBFFF261DCA82006F5C2A /* mapCell */ = {
+			isa = PBXGroup;
+			children = (
+				74FCC000261DCA96006F5C2A /* MapCollectionViewCell.swift */,
+				74FCC001261DCA96006F5C2A /* MapCollectionViewCell.xib */,
+			);
+			path = mapCell;
+			sourceTree = "<group>";
+		};
 		CC0B93E175A1C0240150E96B /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -340,6 +354,7 @@
 				742B0D4C25FF7EBD00146A57 /* StatisticViewController.xib in Resources */,
 				749F373C2614856A002DEB20 /* PhotoCollectionViewCell.xib in Resources */,
 				749F373026148510002DEB20 /* ImageCollectionViewCell.xib in Resources */,
+				74FCC003261DCA96006F5C2A /* MapCollectionViewCell.xib in Resources */,
 				74CB501C25C2E0A9000DF0EB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -393,6 +408,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74FCC002261DCA96006F5C2A /* MapCollectionViewCell.swift in Sources */,
 				74290D2E25ED5D4B00D93DD1 /* ListInteractor.swift in Sources */,
 				749F373B2614856A002DEB20 /* PhotoCollectionViewCell.swift in Sources */,
 				74290D2B25ED5D4B00D93DD1 /* ListRouter.swift in Sources */,
