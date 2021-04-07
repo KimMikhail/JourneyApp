@@ -25,7 +25,7 @@ class DetailsPresenter: DetailsPresentationLogic {
     // MARK: Do something
     func presentStats(response: Details.SetStatistic.Response) {
         let viewModel = Details.SetStatistic.ViewModel(route: response.route)
-        viewController?.displayStats(viewModel: viewModel)
+        viewController?.displayStatsAndName(viewModel: viewModel)
     }
     func presentImage(response: Details.SetImage.Response) {
         let viewModel = Details.SetImage.ViewModel(image: response.image)

@@ -158,7 +158,9 @@ class MapViewController: UIViewController, MapDisplayLogic {
     
     private func showSavingAlert(completionHandler: @escaping (_ name: String) -> ()) {
         let alertController = UIAlertController(title: "Set route name", message: "", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "Ok", style: .default) { (_) in
+        let okAction = UIAlertAction(title: "Save", style: .default) { (_) in
+            //present image picker here
+            
             guard let routeNameString = alertController.textFields?.first?.text else { return }
             completionHandler(routeNameString)
         }

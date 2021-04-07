@@ -13,7 +13,7 @@
 import UIKit
 protocol DetailsDisplayLogic: class {
     func displayImage(viewModel: Details.SetImage.ViewModel)
-    func displayStats(viewModel: Details.SetStatistic.ViewModel)
+    func displayStatsAndName(viewModel: Details.SetStatistic.ViewModel)
     func displayData(viewModel: Details.ShowPhotos.ViewModel)
 }
 
@@ -79,7 +79,7 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic {
         let request = Details.SetStatistic.Request()
         interactor?.prepareStats(request: request)
     }
-    func displayStats(viewModel: Details.SetStatistic.ViewModel) {
+    func displayStatsAndName(viewModel: Details.SetStatistic.ViewModel) {
         route = viewModel.route
         collectionView.reloadSections(IndexSet(integer: 1))
         self.title = route?.routeName
