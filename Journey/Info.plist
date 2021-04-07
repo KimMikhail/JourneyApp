@@ -32,6 +32,8 @@
 	<string>Calories counting</string>
 	<key>NSMotionUsageDescription</key>
 	<string>steps counting</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>create film</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>

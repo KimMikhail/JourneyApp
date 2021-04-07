@@ -30,7 +30,8 @@ class MapRouter: NSObject, MapRoutingLogic, MapDataPassing {
     
     func routeToRouteList(segue: UIStoryboardSegue?) {
       if let segue = segue {
-        let destinationVC = segue.destination as! ListViewController
+        let navigationVC = segue.destination as! UINavigationController
+        let destinationVC = navigationVC.viewControllers.first as! ListViewController
         var destinationDS = destinationVC.router!.dataStore!
         passDataToRouteList(source: dataStore!, destination: &destinationDS)
       } else {

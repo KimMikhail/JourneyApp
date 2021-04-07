@@ -16,15 +16,19 @@ import RealmSwift
 protocol ListBusinessLogic {
     func displayRoutes(request: ListOfRoutes.DisplayRoutes.Request)
     func deleteRow(request: ListOfRoutes.DeleteRow.Request)
+    func select(row: Int)
 }
 
 protocol ListDataStore {
     
     var routesData: Results<Route>! { get set }
+    var selectedRoute: Route? { get set }
     
 }
 
 class ListInteractor: ListBusinessLogic, ListDataStore {
+    var selectedRoute: Route?
+    
     
 //    var routes: [Route] = []
     var routesData: Results<Route>!
@@ -49,5 +53,9 @@ class ListInteractor: ListBusinessLogic, ListDataStore {
         
         let response = ListOfRoutes.DeleteRow.Response(routes: routesData)
         presenter?.presentDeleteRoute(response: response)
+    }
+    func select(row: Int) {
+        selectedRoute = routesData[row]
+        presenter?.presentRouteDetails()
     }
 }
