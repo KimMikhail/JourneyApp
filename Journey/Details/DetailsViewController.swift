@@ -82,6 +82,7 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic {
     func displayStats(viewModel: Details.SetStatistic.ViewModel) {
         route = viewModel.route
         collectionView.reloadSections(IndexSet(integer: 1))
+        self.title = route?.routeName
     }
     func setImage() {
         let request = Details.SetImage.Request()
@@ -93,7 +94,7 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic {
     }
     func fillPhotos() {
         let request = Details.ShowPhotos.Request()
-        interactor?.prepareData(request: request)
+        interactor?.preparePhotos(request: request)
     }
     
     func displayData(viewModel: Details.ShowPhotos.ViewModel) {

@@ -150,6 +150,7 @@ class MapInteractor: NSObject, MapBusinessLogic, MapDataStore, CLLocationManager
             let data = request.image?.pngData()
             route?.imageData = data
         }
+        route?.routeName = request.name
         guard let route = route else { return }
         let response = Map.StopSavingRoute.Response(route: route)
         presenter?.presentStopSavingRoute(response: response)

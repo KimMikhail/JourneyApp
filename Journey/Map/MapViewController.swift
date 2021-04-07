@@ -145,21 +145,22 @@ class MapViewController: UIViewController, MapDisplayLogic {
         isOnTheWay = true
     }
     func saveRoute() {
-        showSavingAlert {
-            let request = Map.StopSavingRoute.Request(image: nil)
+        showSavingAlert(completionHandler: { (name) in
+            let request = Map.StopSavingRoute.Request(name: name, image: nil)
             self.interactor?.stopSavingRoute(request: request)
             self.isOnTheWay = false
-        }
+        })
         
     }
     func getCenterMap() {
         mapView.userTrackingMode = .followWithHeading
     }
     
-    private func showSavingAlert(completionHandler: @escaping () -> ()) {
-        let alertController = UIAlertController(title: "Set name", message: "", preferredStyle: .alert)
+    private func showSavingAlert(completionHandler: @escaping (_ name: String) -> ()) {
+        let alertController = UIAlertController(title: "Set route name", message: "", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Ok", style: .default) { (_) in
-            completionHandler()
+            guard let routeNameString = alertController.textFields?.first?.text else { return }
+            completionHandler(routeNameString)
         }
         okAction.isEnabled = false
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
@@ -169,7 +170,7 @@ class MapViewController: UIViewController, MapDisplayLogic {
             NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: OperationQueue.main, using:
                     {_ in
                         let textCount = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).count ?? 0
-                        let textIsNotEmpty = textCount > 0
+                        let textIsNotEmpty = textCount > 0 && textCount < 16
                         okAction.isEnabled = textIsNotEmpty
                 })
         }

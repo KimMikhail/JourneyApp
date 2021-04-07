@@ -15,7 +15,7 @@ import UIKit
 protocol DetailsBusinessLogic {
     func prepareImage(request: Details.SetImage.Request)
     func prepareStats(request: Details.SetStatistic.Request)
-    func prepareData(request: Details.ShowPhotos.Request)
+    func preparePhotos(request: Details.ShowPhotos.Request)
 }
 
 protocol DetailsDataStore {
@@ -40,7 +40,7 @@ class DetailsInteractor: DetailsBusinessLogic, DetailsDataStore {
         presenter?.presentImage(response: response)
     }
     
-    func prepareData(request: Details.ShowPhotos.Request) {
+    func preparePhotos(request: Details.ShowPhotos.Request) {
         
         guard let route = route else { return }
         guard let from = route.timeStamps.first, let to = route.timeStamps.last else { return }
