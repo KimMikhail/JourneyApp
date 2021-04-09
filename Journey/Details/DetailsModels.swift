@@ -12,6 +12,7 @@
 
 import UIKit
 import CoreLocation
+import MapKit
 
 enum Details {
     // MARK: Use cases
@@ -59,6 +60,16 @@ enum Details {
         }
         struct ViewModel {
             var coordinates: [CLLocationCoordinate2D]
+        }
+    }
+    enum CenterMap {
+        struct Request {
+        }
+        struct Response {
+            var region: MKCoordinateRegion
+        }
+        struct ViewModel {
+            var region: MKCoordinateRegion
         }
     }
 }

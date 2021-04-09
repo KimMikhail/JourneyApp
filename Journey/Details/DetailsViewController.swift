@@ -19,6 +19,7 @@ protocol DetailsDisplayLogic: class {
     func displayStatsAndName(viewModel: Details.SetStatistic.ViewModel)
     func displayData(viewModel: Details.ShowPhotos.ViewModel)
     func displayMap(viewModel: Details.SetMap.ViewModel)
+    func displayCenterMap(viewModel: Details.CenterMap.ViewModel)
 }
 
 class DetailsViewController: UIViewController, DetailsDisplayLogic, MKMapViewDelegate {
@@ -32,6 +33,7 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic, MKMapViewDel
     var interactor: DetailsBusinessLogic?
     var router: (NSObjectProtocol & DetailsRoutingLogic & DetailsDataPassing)?
     var coordinates: [CLLocationCoordinate2D]?
+    var mapView: MKMapView!
     
     // MARK: Object lifecycle
     
@@ -114,6 +116,9 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic, MKMapViewDel
         self.photos = photos
         collectionView.reloadData()
     }
+    func displayCenterMap(viewModel: Details.CenterMap.ViewModel) {
+        mapView?.setRegion(viewModel.region, animated: false)
+    }
     // MARK: Setup
     
     private func setup() {
@@ -158,9 +163,12 @@ extension DetailsViewController: UICollectionViewDelegate, UICollectionViewDataS
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MapCell", for: indexPath) as! MapCollectionViewCell
             if self.coordinates != nil && self.coordinates!.count > 0 {
                 let polyline = MKPolyline(coordinates: self.coordinates!, count: coordinates!.count)
-                cell.mapView.delegate = self
-                cell.mapView.addOverlay(polyline)
-                cell.mapView.setCenter(self.coordinates!.first!, animated: true)
+                self.mapView = cell.mapView
+                self.mapView.delegate = self
+                self.mapView.addOverlay(polyline)
+                self.mapView.setCenter(self.coordinates!.first!, animated: true)
+                let request = Details.CenterMap.Request()
+                interactor?.centerMap(request: request)
             }
             
             return cell

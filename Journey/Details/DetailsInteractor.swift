@@ -12,12 +12,14 @@
 
 import UIKit
 import CoreLocation
+import MapKit
 
 protocol DetailsBusinessLogic {
     func prepareImage(request: Details.SetImage.Request)
     func prepareStats(request: Details.SetStatistic.Request)
     func preparePhotos(request: Details.ShowPhotos.Request)
     func prepareMap(request: Details.SetMap.Request)
+    func centerMap(request: Details.CenterMap.Request)
 }
 
 protocol DetailsDataStore {
@@ -59,5 +61,40 @@ class DetailsInteractor: DetailsBusinessLogic, DetailsDataStore {
         }
         let response = Details.SetMap.Response(coordinates: coordinates)
         presenter?.presentMap(response: response)
+    }
+    func centerMap(request: Details.CenterMap.Request) {
+        guard let route = route else { return }
+        guard let first = route.coordinates.first else { return }
+        var minLat = first.lat
+        var minLon = first.lon
+        var maxLat = minLat
+        var maxLon = minLon
+        for coord in route.coordinates {
+            if coord.lat < minLat {
+                minLat = coord.lat
+            }
+            if coord.lat > maxLat {
+                maxLat = coord.lat
+            }
+            if coord.lon < minLon {
+                minLon = coord.lon
+            }
+            if coord.lon > maxLon {
+                maxLon = coord.lon
+            }
+        }
+        minLat -= 0.001
+        minLon -= 0.001
+        maxLat += 0.001
+        maxLon += 0.001
+        let c1 = CLLocation(latitude: minLat, longitude: minLon)
+        let c2 = CLLocation(latitude: maxLat, longitude: maxLon)
+        let zoom = c1.distance(from: c2)
+        let location = CLLocationCoordinate2D(latitude: (maxLat + minLat)*0.5, longitude: (maxLon + minLon)*0.5)
+        
+        let region = MKCoordinateRegion(center: location, latitudinalMeters: zoom, longitudinalMeters: zoom)
+        
+        let response = Details.CenterMap.Response(region: region)
+        presenter?.presentCenterMap(response: response)
     }
 }
