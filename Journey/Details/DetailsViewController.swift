@@ -152,14 +152,6 @@ extension DetailsViewController: UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.section {
         case 0:
-//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as! ImageCollectionViewCell
-//            if routeImage != nil {
-//                cell.imageView.image = routeImage!
-//            } else {
-//                cell.imageView.contentMode = .scaleAspectFill
-//                cell.imageView.image = UIImage(named: "LaunchScreen")
-//
-//            }
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MapCell", for: indexPath) as! MapCollectionViewCell
             if self.coordinates != nil && self.coordinates!.count > 0 {
                 let polyline = MKPolyline(coordinates: self.coordinates!, count: coordinates!.count)
