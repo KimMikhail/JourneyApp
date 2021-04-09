@@ -27,17 +27,6 @@ enum Details {
             var route: Route
         }
     }
-    enum SetImage {
-        struct Request {
-        }
-        struct Response {
-            var image: UIImage
-        }
-        
-        struct ViewModel {
-            var image: UIImage
-        }
-    }
     enum ShowPhotos {
         struct Request {
         }

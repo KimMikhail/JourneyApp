@@ -13,7 +13,6 @@
 import UIKit
 
 protocol DetailsPresentationLogic {
-    func presentImage(response: Details.SetImage.Response)
     func presentStats(response: Details.SetStatistic.Response)
     func presentData(response: Details.ShowPhotos.Response)
     func presentMap(response: Details.SetMap.Response)
@@ -28,10 +27,6 @@ class DetailsPresenter: DetailsPresentationLogic {
     func presentStats(response: Details.SetStatistic.Response) {
         let viewModel = Details.SetStatistic.ViewModel(route: response.route)
         viewController?.displayStatsAndName(viewModel: viewModel)
-    }
-    func presentImage(response: Details.SetImage.Response) {
-        let viewModel = Details.SetImage.ViewModel(image: response.image)
-        viewController?.displayImage(viewModel: viewModel)
     }
     func presentData(response: Details.ShowPhotos.Response) {
         let viewModel = Details.ShowPhotos.ViewModel(route: response.route, photos: response.photos)

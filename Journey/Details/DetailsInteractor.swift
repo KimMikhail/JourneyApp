@@ -15,7 +15,6 @@ import CoreLocation
 import MapKit
 
 protocol DetailsBusinessLogic {
-    func prepareImage(request: Details.SetImage.Request)
     func prepareStats(request: Details.SetStatistic.Request)
     func preparePhotos(request: Details.ShowPhotos.Request)
     func prepareMap(request: Details.SetMap.Request)
@@ -38,11 +37,6 @@ class DetailsInteractor: DetailsBusinessLogic, DetailsDataStore {
         let response = Details.SetStatistic.Response(route: route)
         presenter?.presentStats(response: response)
     }
-    func prepareImage(request: Details.SetImage.Request) {
-        guard let data = route?.imageData, let image = UIImage(data: data) else { return }
-        let response = Details.SetImage.Response(image: image)
-        presenter?.presentImage(response: response)
-    }
     
     func preparePhotos(request: Details.ShowPhotos.Request) {
         
@@ -54,6 +48,7 @@ class DetailsInteractor: DetailsBusinessLogic, DetailsDataStore {
         presenter?.presentData(response: response)
     }
     func prepareMap(request: Details.SetMap.Request) {
+        print(#function)
         guard let route = route else { return }
         var coordinates = [CLLocationCoordinate2D]()
         for loc in route.coordinates {

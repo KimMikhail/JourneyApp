@@ -15,7 +15,6 @@ import CoreLocation
 import MapKit
 
 protocol DetailsDisplayLogic: class {
-    func displayImage(viewModel: Details.SetImage.ViewModel)
     func displayStatsAndName(viewModel: Details.SetStatistic.ViewModel)
     func displayData(viewModel: Details.ShowPhotos.ViewModel)
     func displayMap(viewModel: Details.SetMap.ViewModel)
@@ -93,18 +92,12 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic, MKMapViewDel
         self.title = route?.routeName
     }
     func setImage() {
-        let request = Details.SetImage.Request()
-        interactor?.prepareImage(request: request)
         let mapRequest = Details.SetMap.Request()
         interactor?.prepareMap(request: mapRequest)
     }
     func displayMap(viewModel: Details.SetMap.ViewModel) {
         coordinates = viewModel.coordinates
         collectionView.reloadSections(IndexSet(integer: 0))
-    }
-    func displayImage(viewModel: Details.SetImage.ViewModel) {
-        routeImage = viewModel.image
-        collectionView.reloadData()
     }
     func fillPhotos() {
         let request = Details.ShowPhotos.Request()
@@ -114,7 +107,7 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic, MKMapViewDel
     func displayData(viewModel: Details.ShowPhotos.ViewModel) {
         guard let photos = viewModel.photos else { return }
         self.photos = photos
-        collectionView.reloadData()
+        collectionView.reloadSections(IndexSet(integer: 2))
     }
     func displayCenterMap(viewModel: Details.CenterMap.ViewModel) {
         mapView?.setRegion(viewModel.region, animated: false)

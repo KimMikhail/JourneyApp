@@ -101,7 +101,7 @@
         <!--Details View Controller-->
         <scene sceneID="LOK-yA-vVH">
             <objects>
-                <viewController storyboardIdentifier="DetailsViewController" id="4hQ-Af-TnW" customClass="DetailsViewController" customModule="Journey" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DetailsViewController" modalTransitionStyle="partialCurl" id="4hQ-Af-TnW" customClass="DetailsViewController" customModule="Journey" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="a7T-et-f4s">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="759"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
