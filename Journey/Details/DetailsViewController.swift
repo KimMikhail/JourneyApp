@@ -192,6 +192,22 @@ extension DetailsViewController: UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         1.5
     }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 2 {
+            let photoVC = PreviewPhotoViewController(nibName: "PreviewPhotoViewController", bundle: nil)
+            _ = photoVC.view
+            guard let photosView = photoVC.photosView else { return }
+            for photo in photos {
+                let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: photosView.frame.height))
+                imageView.contentMode = .scaleAspectFit
+                imageView.image = photo
+                photosView.addView(with: imageView)
+            }
+            present(photoVC, animated: true)
+            
+        }
+    }
+    
 }
 
 extension DetailsViewController {

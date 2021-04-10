@@ -23,7 +23,7 @@ class StatisticCollectionViewCell: UICollectionViewCell {
     func fillCell(route: Route) {
         guard let fromDate = route.timeStamps.first,
               let toDate = route.timeStamps.last else { return }
-        self.timeLabel.text = getTimeString(timeInterval: fromDate.distance(to: toDate)) as? String
+        self.timeLabel.text = getTimeString(timeInterval: fromDate.distance(to: toDate))
         self.distanceLabel.text = "\(route.distance)"
         self.speedLabel.text = "\(route.averageSpeed)"
         self.stepsLabel.text = "\(route.steps)"
