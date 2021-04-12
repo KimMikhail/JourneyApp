@@ -11,6 +11,7 @@ import UIKit
 class RouteTableViewCell: UITableViewCell {
 
     
+    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var photoView: UIImageView!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var distanceLabel: UILabel!

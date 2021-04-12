@@ -11,13 +11,17 @@
 //
 
 import UIKit
+import CoreLocation
+import MapKit
+
 protocol DetailsDisplayLogic: class {
-    func displayImage(viewModel: Details.SetImage.ViewModel)
-    func displayStats(viewModel: Details.SetStatistic.ViewModel)
+    func displayStatsAndName(viewModel: Details.SetStatistic.ViewModel)
     func displayData(viewModel: Details.ShowPhotos.ViewModel)
+    func displayMap(viewModel: Details.SetMap.ViewModel)
+    func displayCenterMap(viewModel: Details.CenterMap.ViewModel)
 }
 
-class DetailsViewController: UIViewController, DetailsDisplayLogic {
+class DetailsViewController: UIViewController, DetailsDisplayLogic, MKMapViewDelegate {
     
     @IBOutlet var collectionView: UICollectionView!
     
@@ -27,6 +31,8 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic {
     var statsCell: StatisticCollectionViewCell!
     var interactor: DetailsBusinessLogic?
     var router: (NSObjectProtocol & DetailsRoutingLogic & DetailsDataPassing)?
+    var coordinates: [CLLocationCoordinate2D]?
+    var mapView: MKMapView!
     
     // MARK: Object lifecycle
     
@@ -58,6 +64,7 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic {
         collectionView.register(UINib(nibName: "PhotoCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "PhotoCell")
         collectionView.register(UINib(nibName: "StatisticCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "StatisticCell")
         collectionView.register(UINib(nibName: "ImageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "ImageCell")
+        collectionView.register(UINib(nibName: "MapCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "MapCell")
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: UIScreen.main.bounds.width / 3 - 7, height: UIScreen.main.bounds.width / 3 - 7)
         collectionView.collectionViewLayout = layout
@@ -79,27 +86,31 @@ class DetailsViewController: UIViewController, DetailsDisplayLogic {
         let request = Details.SetStatistic.Request()
         interactor?.prepareStats(request: request)
     }
-    func displayStats(viewModel: Details.SetStatistic.ViewModel) {
+    func displayStatsAndName(viewModel: Details.SetStatistic.ViewModel) {
         route = viewModel.route
         collectionView.reloadSections(IndexSet(integer: 1))
+        self.title = route?.routeName
     }
     func setImage() {
-        let request = Details.SetImage.Request()
-        interactor?.prepareImage(request: request)
+        let mapRequest = Details.SetMap.Request()
+        interactor?.prepareMap(request: mapRequest)
     }
-    func displayImage(viewModel: Details.SetImage.ViewModel) {
-        routeImage = viewModel.image
-        collectionView.reloadData()
+    func displayMap(viewModel: Details.SetMap.ViewModel) {
+        coordinates = viewModel.coordinates
+        collectionView.reloadSections(IndexSet(integer: 0))
     }
     func fillPhotos() {
         let request = Details.ShowPhotos.Request()
-        interactor?.prepareData(request: request)
+        interactor?.preparePhotos(request: request)
     }
     
     func displayData(viewModel: Details.ShowPhotos.ViewModel) {
         guard let photos = viewModel.photos else { return }
         self.photos = photos
-        collectionView.reloadData()
+        collectionView.reloadSections(IndexSet(integer: 2))
+    }
+    func displayCenterMap(viewModel: Details.CenterMap.ViewModel) {
+        mapView?.setRegion(viewModel.region, animated: false)
     }
     // MARK: Setup
     
@@ -134,14 +145,17 @@ extension DetailsViewController: UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.section {
         case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as! ImageCollectionViewCell
-            if routeImage != nil {
-                cell.imageView.image = routeImage!
-            } else {
-                cell.imageView.contentMode = .scaleAspectFill
-                cell.imageView.image = UIImage(named: "LaunchScreen")
-                
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MapCell", for: indexPath) as! MapCollectionViewCell
+            if self.coordinates != nil && self.coordinates!.count > 0 {
+                let polyline = MKPolyline(coordinates: self.coordinates!, count: coordinates!.count)
+                self.mapView = cell.mapView
+                self.mapView.delegate = self
+                self.mapView.addOverlay(polyline)
+                self.mapView.setCenter(self.coordinates!.first!, animated: true)
+                let request = Details.CenterMap.Request()
+                interactor?.centerMap(request: request)
             }
+            
             return cell
         case 1:
             statsCell = collectionView.dequeueReusableCell(withReuseIdentifier: "StatisticCell", for: indexPath) as? StatisticCollectionViewCell
@@ -177,5 +191,31 @@ extension DetailsViewController: UICollectionViewDelegate, UICollectionViewDataS
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         1.5
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 2 {
+            let photoVC = PreviewPhotoViewController(nibName: "PreviewPhotoViewController", bundle: nil)
+            _ = photoVC.view
+            guard let photosView = photoVC.photosView else { return }
+            for photo in photos {
+                let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: photosView.frame.height))
+                imageView.contentMode = .scaleAspectFit
+                imageView.image = photo
+                photosView.addView(with: imageView)
+            }
+            present(photoVC, animated: true)
+            
+        }
+    }
+    
+}
+
+extension DetailsViewController {
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let renderer = MKPolylineRenderer(overlay: overlay)
+        renderer.lineWidth = 10
+        renderer.strokeColor = .blue
+        renderer.alpha = 0.5
+        return renderer
     }
 }

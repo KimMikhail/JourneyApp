@@ -145,30 +145,41 @@ class MapViewController: UIViewController, MapDisplayLogic {
         isOnTheWay = true
     }
     func saveRoute() {
-        let request = Map.StopSavingRoute.Request(image: nil)
-        interactor?.stopSavingRoute(request: request)
-        isOnTheWay = false
+        showSavingAlert(completionHandler: { (name) in
+            let request = Map.StopSavingRoute.Request(name: name, image: nil)
+            self.interactor?.stopSavingRoute(request: request)
+            self.isOnTheWay = false
+        })
+        
     }
     func getCenterMap() {
         mapView.userTrackingMode = .followWithHeading
     }
+    
+    private func showSavingAlert(completionHandler: @escaping (_ name: String) -> ()) {
+        let alertController = UIAlertController(title: "Set route name", message: "", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Save", style: .default) { (_) in
+            //present image picker here
+            
+            guard let routeNameString = alertController.textFields?.first?.text else { return }
+            completionHandler(routeNameString)
+        }
+        okAction.isEnabled = false
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+        alertController.addAction(okAction)
+        alertController.addAction(cancelAction)
+        alertController.addTextField { (textField) in
+            NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: OperationQueue.main, using:
+                    {_ in
+                        let textCount = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).count ?? 0
+                        let textIsNotEmpty = textCount > 0 && textCount < 16
+                        okAction.isEnabled = textIsNotEmpty
+                })
+        }
+        self.present(alertController, animated: true)
+    }
 }
 extension MapViewController: MKMapViewDelegate {
-    
-//    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-//        if isOnTheWay {
-//            let request = Map.SavingRoute.Request(location: userLocation.location!)
-//            self.interactor?.savingRoute(request: request)
-//
-//        }
-//        let request = Map.GetCurrentLocation.Request(success: true)
-//        interactor?.getCurrentLocation(request: request)
-//    }
-//    func mapView(_ mapView: MKMapView, didFailToLocateUserWithError error: Error) {
-//        currentLocation = nil
-//        let request = Map.GetCurrentLocation.Request(success: false, error: error as NSError)
-//        interactor?.getCurrentLocation(request: request)
-//    }
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let renderer = MKPolylineRenderer(overlay: overlay)
         renderer.lineWidth = 10

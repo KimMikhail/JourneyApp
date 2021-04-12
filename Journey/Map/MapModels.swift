@@ -91,6 +91,7 @@ enum Map {
     
     enum StopSavingRoute {
         struct Request {
+            var name: String
             var image: UIImage?
         }
         struct Response {

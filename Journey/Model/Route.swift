@@ -16,6 +16,7 @@ class Route: Object {
     var coordinates = List<LocationCoordinate>()
     var speeds = List<Double>()
     var timeStamps = List<Date>()
+    @objc dynamic var routeName: String?
     @objc dynamic var averageSpeed: Double
     @objc dynamic var distance: Double
     @objc dynamic var calories: Double
@@ -43,8 +44,8 @@ class Route: Object {
 }
 
 class LocationCoordinate: Object{
-    var lat: Double = 0
-    var lon: Double = 0
+    @objc dynamic var lat: Double = 0
+    @objc dynamic var lon: Double = 0
     init(lat: Double, lon: Double) {
         self.lat = lat
         self.lon = lon

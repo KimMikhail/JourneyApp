@@ -108,6 +108,7 @@ extension ListViewController {
         
         if let cell = tableView.dequeueReusableCell(withIdentifier: "RouteTableViewCell") as? RouteTableViewCell {
             let route = routes[indexPath.row]
+            cell.nameLabel.text = route.routeName!
             cell.distanceLabel.text = "\(route.distance) km"
             cell.timeLabel.text = getTimeString(timeInterval: route.timeStamps.last!.timeIntervalSince(route.timeStamps.first!))
             cell.stepsLabel.text = "\(route.steps)"
