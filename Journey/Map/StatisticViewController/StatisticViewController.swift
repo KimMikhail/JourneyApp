@@ -58,16 +58,10 @@ class StatisticViewController: CardViewController {
         self.stepsLabel.text = "\(viewModel.steps)"
     }
     @objc func startRouteAction(_ sender: Any) {
-        guard let button = sender as? UIButton else { return }
         guard let mapVC = controller as? MapViewController else { return }
         guard let _ = mapVC.mapView.userLocation.location else { return }
         mapVC.startRoute()
-        UIView.animate(withDuration: 0.5) {
-            button.frame.origin.x = 0
-            button.setTitle("Slide to stop", for: .normal)
-            button.layer.borderWidth = 0
-            self.setPanGesture()
-        }
+        setStopButtonFrame()
     }
     private func setPanGesture() {
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(panToStop(recognizer:)))
@@ -113,7 +107,7 @@ class StatisticViewController: CardViewController {
     }
     private func endInteractiveTransition(recognizer: UIPanGestureRecognizer) {
         let frameAnimator = UIViewPropertyAnimator(duration: 0.5, dampingRatio: 1) { [self] in
-            if self.animations.first!.fractionComplete < 1{
+            if self.animations.first!.fractionComplete < 1 {
             self.startRouteButton.frame.origin.x = 0
             }
         }
@@ -124,12 +118,6 @@ class StatisticViewController: CardViewController {
         if animations.first?.fractionComplete == 1 {
             guard let mapVC = controller as? MapViewController else { return }
             mapVC.saveRoute()
-            startRouteButton.gestureRecognizers?.removeAll()
-            UIView.animate(withDuration: 0.3) {
-                self.startRouteButton.frame = self.startButtonFrame
-                self.startRouteButton.setTitle("Start", for: .normal)
-                self.startRouteButton.layer.borderWidth = 2
-            }
             clearLabels()
         }
     }
@@ -139,5 +127,21 @@ class StatisticViewController: CardViewController {
         speedLabel.text = "0"
         averageSpeedLabel.text = "0"
         stepsLabel.text = "0"
+    }
+    func setStartButtonFrame() {
+        startRouteButton.gestureRecognizers?.removeAll()
+        UIView.animate(withDuration: 0.3) {
+            self.startRouteButton.frame = self.startButtonFrame
+            self.startRouteButton.setTitle("Start", for: .normal)
+            self.startRouteButton.layer.borderWidth = 2
+        }
+    }
+    func setStopButtonFrame() {
+        setPanGesture()
+        UIView.animate(withDuration: 0.5) {
+            self.startRouteButton.frame.origin.x = 0
+            self.startRouteButton.setTitle("Slide to stop", for: .normal)
+            self.startRouteButton.layer.borderWidth = 0
+        }
     }
 }

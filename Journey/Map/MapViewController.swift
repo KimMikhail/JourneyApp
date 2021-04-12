@@ -160,14 +160,16 @@ class MapViewController: UIViewController, MapDisplayLogic {
         let alertController = UIAlertController(title: "Set route name", message: "", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Save", style: .default) { (_) in
             //present image picker here
-            
+            self.statisticViewController?.setStartButtonFrame()
             guard let routeNameString = alertController.textFields?.first?.text else { return }
             completionHandler(routeNameString)
         }
         okAction.isEnabled = false
-        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
-        alertController.addAction(okAction)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive) { (_) in
+            self.statisticViewController?.setStopButtonFrame()
+        }
         alertController.addAction(cancelAction)
+        alertController.addAction(okAction)
         alertController.addTextField { (textField) in
             NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: OperationQueue.main, using:
                     {_ in
